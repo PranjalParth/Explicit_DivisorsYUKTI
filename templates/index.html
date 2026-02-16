@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AgriStable - Farm Stability Index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">🌱 AgriStable</h2>
+        <ul>
+            <li onclick="showDashboard()">Dashboard</li>
+            <li onclick="toggleAdvanced()">Advanced Inputs</li>
+            <li onclick="showSimulation()">Simulations</li>
+            <li>🚨 Alerts</li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <!-- ================= DASHBOARD ================= -->
+        <div id="dashboardContent">
+
+            <div class="header">
+                <h1>Farm Stability Index</h1>
+                <p>AI-powered farm risk intelligence</p>
+            </div>
+
+            <div class="top-row">
+
+                <!-- FORM -->
+                <div class="card">
+                    <h3>Calculate Farm Stability</h3>
+
+                    <form id="riskForm">
+
+                        <div class="grid">
+
+                            <div>
+                                <label>Region</label>
+                                <select name="Region">
+                                    <option value="Normal">Normal</option>
+                                    <option value="Coastal">Coastal</option>
+                                    <option value="Dryland">Dryland</option>
+                                </select>
+                            </div>
+
+
+                            <div>
+                                <label>Water Source</label>
+                                <select name="Water_Source">
+                                    <option value="Rainfed">Rainfed</option>
+                                    <option value="Canal">Canal Irrigation</option>
+                                    <option value="Drip">Drip Irrigation</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label>Crop Insurance</label>
+                                <select name="Insurance">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label>Season</label>
+                                <select name="Season" required>
+                                    <option value="NORMAL">Normal</option>
+                                    <option value="MONSOON">Monsoon</option>
+                                    <option value="HARVEST">Harvest</option>
+                                </select>
+                            </div>
+
+
+                            <div>
+                                <label>Crop Type</label>
+                                <select name="Crop_Type" required>
+                                    <option value="Wheat">Wheat</option>
+                                    <option value="Rice">Rice</option>
+                                    <option value="Corn">Corn</option>
+                                    <option value="Strawberry">Strawberry</option>
+                                    <option value="Grapes">Grapes</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label>Loan Amount</label>
+                                <input type="number" name="Loan_Amount" required>
+                            </div>
+
+                            <div>
+                                <label>Input Cost</label>
+                                <input type="number" name="Input_Cost" required>
+                            </div>
+
+                            <div>
+                                <label>Yield Estimate</label>
+                                <input type="number" name="Yield_Estimate" required>
+                            </div>
+
+                            <div>
+                                <label>Storage Access</label>
+                                <select name="Storage_Access">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label>Income Stability</label>
+                                <select name="Income_Stability">
+                                    <option value="1">Stable</option>
+                                    <option value="0">Unstable</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div id="advancedSection" class="hidden">
+                            <h4>Advanced Accuracy Inputs</h4>
+                            <input type="number" name="Rainfall_Deviation" placeholder="Rainfall Deviation">
+                            <input type="number" step="0.1" name="Market_Volatility" placeholder="Market Volatility">
+                        </div>
+
+                        <button type="submit">Calculate Stability Score</button>
+
+                    </form>
+                </div>
+
+                <!-- RESULT -->
+                <div class="card hidden" id="result">
+
+                    <h3>Farm Stability Index</h3>
+
+                    <div class="gauge-container">
+                        <canvas id="fsiGauge"></canvas>
+                        <div class="gauge-text">
+                            <h2 id="gaugeValue">0</h2>
+                            <p id="gaugeLabel">--</p>
+                        </div>
+                    </div>
+
+                    <!-- Risk Drivers -->
+                    <div id="riskDriverSection" class="hidden">
+                        <h3>Top Risk Drivers</h3>
+                        <canvas id="riskDriverChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= SIMULATION ================= -->
+
+        <div id="simulationSection" class="hidden">
+
+            <div class="header">
+                <h1>What-If Simulation</h1>
+                <p>Model different scenarios</p>
+            </div>
+
+            <div class="simulation-layout">
+
+                <div class="card">
+
+                    <div class="slider-group">
+                        <label>Rainfall Deviation (%)</label>
+                        <input type="range" min="-50" max="50" value="0" id="rainSlider">
+                        <span id="rainVal">0%</span>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Input Cost Change (%)</label>
+                        <input type="range" min="-50" max="50" value="0" id="costSlider">
+                        <span id="costVal">0%</span>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Market Volatility (%)</label>
+                        <input type="range" min="-50" max="50" value="0" id="marketSlider">
+                        <span id="marketVal">0%</span>
+                    </div>
+
+                    <button onclick="runSimulation()">Run Simulation</button>
+
+                </div>
+
+                <div class="card center">
+                    <h3>Projected Stability</h3>
+                    <canvas id="simulationGauge"></canvas>
+                    <h2 id="simScore">0</h2>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+Rainfall_Deviation
+Market_Volatility
+Loan_Amount
+Input_Cost
+Yield_Estimate
+Storage_Access
+Income_Stability
+Crop_Type_Pulses
+Crop_Type_Rice
+Crop_Type_Sugarcane
+Crop_Type_Wheat
