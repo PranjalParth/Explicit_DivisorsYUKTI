@@ -13,14 +13,18 @@
     <div class="sidebar">
         <h2 class="logo">🌱 AgriStable</h2>
         <ul>
-            <li onclick="showDashboard()">Dashboard</li>
+            <li class="active" onclick="showDashboard()">Dashboard</li>
             <li onclick="toggleAdvanced()">Advanced Inputs</li>
             <li onclick="showSimulation()">Simulations</li>
-            <li>🚨 Alerts</li>
+            <li onclick="showAlerts()" id="alertsTab">
+                🚨 Alerts <span id="alertBadge" class="badge hidden">!</span>
+            </li>
+            <li onclick="showAIHelp()" id="aiHelpTab">
+                🤖 AI Help Guide <span id="aiBadge" class="badge hidden">!</span>
+            </li>
         </ul>
     </div>
 
-    <!-- Main -->
     <div class="main">
 
         <!-- ================= DASHBOARD ================= -->
@@ -33,12 +37,10 @@
 
             <div class="top-row">
 
-                <!-- FORM -->
                 <div class="card">
                     <h3>Calculate Farm Stability</h3>
 
                     <form id="riskForm">
-
                         <div class="grid">
 
                             <div>
@@ -50,13 +52,12 @@
                                 </select>
                             </div>
 
-
                             <div>
                                 <label>Water Source</label>
                                 <select name="Water_Source">
                                     <option value="Rainfed">Rainfed</option>
-                                    <option value="Canal">Canal Irrigation</option>
-                                    <option value="Drip">Drip Irrigation</option>
+                                    <option value="Canal">Canal</option>
+                                    <option value="Drip">Drip</option>
                                 </select>
                             </div>
 
@@ -76,7 +77,6 @@
                                     <option value="HARVEST">Harvest</option>
                                 </select>
                             </div>
-
 
                             <div>
                                 <label>Crop Type</label>
@@ -129,13 +129,11 @@
                         </div>
 
                         <button type="submit">Calculate Stability Score</button>
-
                     </form>
                 </div>
 
                 <!-- RESULT -->
                 <div class="card hidden" id="result">
-
                     <h3>Farm Stability Index</h3>
 
                     <div class="gauge-container">
@@ -146,7 +144,8 @@
                         </div>
                     </div>
 
-                    <!-- Risk Drivers -->
+                    <p id="riskSummary" class="gauge-desc"></p>
+
                     <div id="riskDriverSection" class="hidden">
                         <h3>Top Risk Drivers</h3>
                         <canvas id="riskDriverChart"></canvas>
@@ -155,16 +154,13 @@
                 </div>
 
             </div>
-
         </div>
 
         <!-- ================= SIMULATION ================= -->
-
         <div id="simulationSection" class="hidden">
-
             <div class="header">
                 <h1>What-If Simulation</h1>
-                <p>Model different scenarios</p>
+                <p>Compare scenario impact vs baseline</p>
             </div>
 
             <div class="simulation-layout">
@@ -190,23 +186,45 @@
                     </div>
 
                     <button onclick="runSimulation()">Run Simulation</button>
-
                 </div>
 
                 <div class="card center">
                     <h3>Projected Stability</h3>
                     <canvas id="simulationGauge"></canvas>
-                    <h2 id="simScore">0</h2>
+                    <p id="simDelta"></p>
+                    <p id="simInsight"></p>
                 </div>
 
             </div>
+        </div>
 
+        <!-- ================= ALERTS ================= -->
+        <div id="alertsSection" class="hidden">
+            <div class="header">
+                <h1>Farm Alerts</h1>
+            </div>
+
+            <div id="alertCard" class="card hidden"></div>
+        </div>
+
+        <!-- ================= AI HELP GUIDE ================= -->
+        <div id="aiHelpSection" class="hidden">
+            <div class="header">
+                <h1>AI Help Guide</h1>
+                <p>Personalized strategic recommendations</p>
+            </div>
+
+            <div class="card">
+                <ul id="aiHelpList"></ul>
+            </div>
         </div>
 
     </div>
 </div>
 
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+<!-- 🚨 ALERT POPUP CONTAINER (NEW) -->
+<div id="alertPopupContainer"></div>
 
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
